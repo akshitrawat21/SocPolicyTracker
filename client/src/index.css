@@ -156,7 +156,7 @@
 }
 
 .alert-banner.success {
-  @apply border-success bg-success text-success-foreground;
+  @apply border-green-500 bg-green-500 text-green-900;
 }
 
 /* Loading skeleton */
