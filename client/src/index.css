@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 210 11% 98%; /* #F5F7FA */
+  --foreground: 215 25% 27%; /* #3A4A5C */
+  --muted: 220 14% 96%; /* #F1F3F5 */
+  --muted-foreground: 215 16% 47%; /* #64748B */
+  --popover: 0 0% 100%; /* #FFFFFF */
+  --popover-foreground: 215 25% 27%; /* #3A4A5C */
+  --card: 0 0% 100%; /* #FFFFFF */
+  --card-foreground: 215 25% 27%; /* #3A4A5C */
+  --border: 220 13% 91%; /* #E2E8F0 */
+  --input: 220 13% 91%; /* #E2E8F0 */
+  --primary: 207 90% 54%; /* #1976D2 */
+  --primary-foreground: 0 0% 100%; /* #FFFFFF */
+  --secondary: 220 14% 96%; /* #F1F3F5 */
+  --secondary-foreground: 215 25% 27%; /* #3A4A5C */
+  --accent: 220 14% 96%; /* #F1F3F5 */
+  --accent-foreground: 215 25% 27%; /* #3A4A5C */
+  --destructive: 0 84% 60%; /* #EF4444 */
+  --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+  --ring: 207 90% 54%; /* #1976D2 */
+  --radius: 0.5rem;
+  
+  /* Custom colors for SOC 2 theme */
+  --sidebar-background: 0 0% 100%; /* #FFFFFF */
+  --sidebar-foreground: 215 25% 27%; /* #3A4A5C */
+  --sidebar-primary: 207 90% 54%; /* #1976D2 */
+  --sidebar-primary-foreground: 0 0% 100%; /* #FFFFFF */
+  --sidebar-accent: 220 14% 96%; /* #F1F3F5 */
+  --sidebar-accent-foreground: 215 25% 27%; /* #3A4A5C */
+  --sidebar-border: 220 13% 91%; /* #E2E8F0 */
+  --sidebar-ring: 207 90% 54%; /* #1976D2 */
+  
+  /* Status colors */
+  --success: 142 71% 45%; /* #22C55E */
+  --success-foreground: 0 0% 100%; /* #FFFFFF */
+  --warning: 38 92% 50%; /* #F59E0B */
+  --warning-foreground: 0 0% 100%; /* #FFFFFF */
+  --error: 0 84% 60%; /* #EF4444 */
+  --error-foreground: 0 0% 100%; /* #FFFFFF */
+}
+
+.dark {
+  --background: 222 84% 5%; /* #0A0E1A */
+  --foreground: 210 40% 98%; /* #F8FAFC */
+  --muted: 217 33% 17%; /* #1E293B */
+  --muted-foreground: 215 20% 65%; /* #94A3B8 */
+  --popover: 222 84% 5%; /* #0A0E1A */
+  --popover-foreground: 210 40% 98%; /* #F8FAFC */
+  --card: 222 84% 5%; /* #0A0E1A */
+  --card-foreground: 210 40% 98%; /* #F8FAFC */
+  --border: 217 33% 17%; /* #1E293B */
+  --input: 217 33% 17%; /* #1E293B */
+  --primary: 207 90% 54%; /* #1976D2 */
+  --primary-foreground: 0 0% 100%; /* #FFFFFF */
+  --secondary: 217 33% 17%; /* #1E293B */
+  --secondary-foreground: 210 40% 98%; /* #F8FAFC */
+  --accent: 217 33% 17%; /* #1E293B */
+  --accent-foreground: 210 40% 98%; /* #F8FAFC */
+  --destructive: 0 62% 30%; /* #991B1B */
+  --destructive-foreground: 210 40% 98%; /* #F8FAFC */
+  --ring: 207 90% 54%; /* #1976D2 */
+  
+  --sidebar-background: 222 84% 5%; /* #0A0E1A */
+  --sidebar-foreground: 210 40% 98%; /* #F8FAFC */
+  --sidebar-primary: 207 90% 54%; /* #1976D2 */
+  --sidebar-primary-foreground: 0 0% 100%; /* #FFFFFF */
+  --sidebar-accent: 217 33% 17%; /* #1E293B */
+  --sidebar-accent-foreground: 210 40% 98%; /* #F8FAFC */
+  --sidebar-border: 217 33% 17%; /* #1E293B */
+  --sidebar-ring: 207 90% 54%; /* #1976D2 */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* Status badge styles */
+.status-approved {
+  @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100;
+}
+
+.status-pending {
+  @apply bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100;
+}
+
+.status-draft {
+  @apply bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100;
+}
+
+.status-deprecated {
+  @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100;
+}
+
+/* Sidebar link styles */
+.sidebar-link {
+  @apply flex items-center space-x-3 px-4 py-3 text-sidebar-foreground rounded-lg transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground;
+}
+
+.sidebar-link.active {
+  @apply bg-sidebar-primary text-sidebar-primary-foreground shadow-sm;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Metric card hover effects */
+.metric-card {
+  @apply transition-all duration-200 hover:shadow-md hover:scale-[1.02];
+}
+
+/* Table hover effects */
+.table-row-hover {
+  @apply transition-colors duration-150 hover:bg-muted/50;
+}
+
+/* Form focus styles */
+.form-input {
+  @apply transition-all duration-200 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:border-primary;
+}
+
+/* Alert banner styles */
+.alert-banner {
+  @apply border-l-4 bg-opacity-10 backdrop-blur-sm;
+}
+
+.alert-banner.warning {
+  @apply border-warning bg-warning text-warning-foreground;
+}
+
+.alert-banner.error {
+  @apply border-error bg-error text-error-foreground;
+}
+
+.alert-banner.success {
+  @apply border-success bg-success text-success-foreground;
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply animate-pulse bg-muted rounded;
+}
+
+/* Policy type specific colors */
+.policy-security {
+  @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100;
+}
+
+.policy-usage {
+  @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100;
+}
+
+.policy-crypto {
+  @apply bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100;
+}
+
+.policy-data {
+  @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar-link {
+    @apply px-3 py-2;
+  }
+  
+  .metric-card {
+    @apply p-4;
+  }
+}
