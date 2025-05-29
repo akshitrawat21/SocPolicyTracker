@@ -29,6 +29,7 @@ export default function Policies() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [viewingPolicy, setViewingPolicy] = useState<PolicyWithVersions | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -267,7 +268,12 @@ export default function Policies() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center space-x-2">
-                        <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-900">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="text-blue-600 hover:text-blue-900"
+                          onClick={() => setViewingPolicy(policy)}
+                        >
                           <Eye className="w-4 h-4" />
                         </Button>
                         <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
@@ -314,6 +320,115 @@ export default function Policies() {
           )}
         </CardContent>
       </Card>
+
+      {/* Policy View Dialog */}
+      <Dialog open={!!viewingPolicy} onOpenChange={() => setViewingPolicy(null)}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              {viewingPolicy && getPolicyIcon(viewingPolicy.type)}
+              <span>{viewingPolicy?.title}</span>
+              {viewingPolicy?.latestVersion && getStatusBadge(viewingPolicy.latestVersion.status)}
+            </DialogTitle>
+          </DialogHeader>
+          
+          {viewingPolicy && (
+            <div className="space-y-6">
+              {/* Policy Details */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">Policy Information</h4>
+                  <div className="space-y-2 text-sm">
+                    <div><span className="font-medium">Type:</span> {viewingPolicy.type.replace('_', ' ')}</div>
+                    <div><span className="font-medium">Created:</span> {new Date(viewingPolicy.createdAt).toLocaleDateString()}</div>
+                    <div><span className="font-medium">Last Updated:</span> {new Date(viewingPolicy.updatedAt).toLocaleDateString()}</div>
+                    <div><span className="font-medium">Current Version:</span> {viewingPolicy.latestVersion?.version || "No version"}</div>
+                  </div>
+                </div>
+                
+                {viewingPolicy.latestVersion && (
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-2">Version Information</h4>
+                    <div className="space-y-2 text-sm">
+                      <div><span className="font-medium">Status:</span> {viewingPolicy.latestVersion.status}</div>
+                      <div><span className="font-medium">Version Created:</span> {new Date(viewingPolicy.latestVersion.createdAt).toLocaleDateString()}</div>
+                      {viewingPolicy.latestVersion.approvedAt && (
+                        <div><span className="font-medium">Approved:</span> {new Date(viewingPolicy.latestVersion.approvedAt).toLocaleDateString()}</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Description */}
+              {viewingPolicy.description && (
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">Description</h4>
+                  <p className="text-gray-700 text-sm">{viewingPolicy.description}</p>
+                </div>
+              )}
+
+              {/* Policy Content */}
+              {viewingPolicy.latestVersion?.content && (
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">Policy Content</h4>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="text-sm text-gray-700 whitespace-pre-wrap">
+                      {viewingPolicy.latestVersion.content}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Version History */}
+              {viewingPolicy.versions && viewingPolicy.versions.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">Version History</h4>
+                  <div className="space-y-2">
+                    {viewingPolicy.versions.map((version) => (
+                      <div key={version.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <div className="font-medium text-sm">v{version.version}</div>
+                          {getStatusBadge(version.status)}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {new Date(version.createdAt).toLocaleDateString()}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex justify-end space-x-3 pt-4 border-t">
+                <Button variant="outline" onClick={() => setViewingPolicy(null)}>
+                  Close
+                </Button>
+                <Button variant="outline">
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit Policy
+                </Button>
+                {viewingPolicy.latestVersion?.status === "PENDING" && (
+                  <Button 
+                    onClick={() => {
+                      if (viewingPolicy.latestVersion) {
+                        handleApprovePolicy(viewingPolicy.latestVersion.id);
+                        setViewingPolicy(null);
+                      }
+                    }}
+                    disabled={approvePolicyMutation.isPending}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Approve Version
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
