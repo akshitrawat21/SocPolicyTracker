@@ -79,22 +79,20 @@ export default function Sidebar() {
           const Icon = item.icon;
           
           return (
-            <Link key={item.href} href={item.href}>
-              <a className={cn(
-                "sidebar-link",
-                isActive && "active"
-              )}>
-                <Icon className="w-5 h-5" />
-                <span className="font-medium">{item.title}</span>
-                {item.badge && (
-                  <Badge 
-                    variant="destructive" 
-                    className="ml-auto bg-red-500 text-white text-xs px-2 py-1"
-                  >
-                    {item.badge}
-                  </Badge>
-                )}
-              </a>
+            <Link key={item.href} href={item.href} className={cn(
+              "sidebar-link",
+              isActive && "active"
+            )}>
+              <Icon className="w-5 h-5" />
+              <span className="font-medium">{item.title}</span>
+              {item.badge && (
+                <Badge 
+                  variant="destructive" 
+                  className="ml-auto bg-red-500 text-white text-xs px-2 py-1"
+                >
+                  {item.badge}
+                </Badge>
+              )}
             </Link>
           );
         })}

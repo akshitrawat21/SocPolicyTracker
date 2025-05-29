@@ -46,7 +46,26 @@ export default function PolicyForm({ onSubmit, isLoading, initialData }: PolicyF
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    // Format data for submission
+    const submitData = {
+      title: formData.title,
+      description: formData.description,
+      type: formData.type,
+      companyId: 1, // In a real app, this would come from user context
+      templateSource: formData.templateSource,
+      isTemplate: formData.isTemplate,
+      frameworks: formData.frameworks,
+      // Include version data if creating custom content
+      ...(formData.templateSource === "CUSTOM" && formData.content && {
+        version: {
+          version: formData.version,
+          content: formData.content,
+          status: formData.status,
+          createdBy: 1, // In a real app, this would come from user context
+        }
+      })
+    };
+    onSubmit(submitData);
   };
 
   const handleFrameworkChange = (framework: string, checked: boolean) => {
