@@ -148,11 +148,11 @@
 }
 
 .alert-banner.warning {
-  @apply border-warning bg-warning text-warning-foreground;
+  @apply border-yellow-500 bg-yellow-500 text-yellow-900;
 }
 
 .alert-banner.error {
-  @apply border-error bg-error text-error-foreground;
+  @apply border-red-500 bg-red-500 text-red-900;
 }
 
 .alert-banner.success {
